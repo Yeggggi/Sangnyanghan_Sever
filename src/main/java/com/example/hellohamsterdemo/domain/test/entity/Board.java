@@ -62,14 +62,14 @@ public class Board {
     //mapping author를 한다.
     private String author;
 
-//    @CreatedDate //생성날짜 구나 라는 것을 암
-//    @Column(name = "created_at")
-//    private LocalDateTime createdAt;
-//    //camelCase하면 db에서 언더 바로 읽는다(_);
-//
-//    @LastModifiedDate // 수정시간
-//    @Column(name = "updated_at")
-//    private LocalDateTime updateAt;
+    @CreatedDate //생성날짜 구나 라는 것을 암
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    //camelCase하면 db에서 언더 바로 읽는다(_);
+
+    @LastModifiedDate // 수정시간
+    @Column(name = "updated_at")
+    private LocalDateTime updateAt;
 
 
     @Builder //Setter역할 한다
