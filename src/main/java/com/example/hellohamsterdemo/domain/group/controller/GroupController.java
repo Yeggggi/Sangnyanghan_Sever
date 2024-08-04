@@ -1,10 +1,12 @@
 package com.example.hellohamsterdemo.domain.group.controller;
 
 import com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO;
+import com.example.hellohamsterdemo.domain.group.dto.GroupUpdateDTO;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import com.example.hellohamsterdemo.domain.group.repository.GroupRepository;
 import com.example.hellohamsterdemo.domain.group.service.GroupService;
 import com.example.hellohamsterdemo.domain.group.dto.GroupCreateDTO;
+import com.example.hellohamsterdemo.domain.task.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,8 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
 
-    @PostMapping("/post") //새 그룹 등록
+    //새 그룹 등록
+    @PostMapping("/post")
     public ResponseEntity<TodoGroup> saveGroup(@RequestBody GroupCreateDTO dto) {
 
         TodoGroup savedGroup = groupService.saveGroup(dto);
@@ -32,7 +35,8 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedGroup);
     }
 
-    @GetMapping("/id/{member_id}") // 그룹 아이디 요청
+    // 그룹 아이디 요청
+    @GetMapping("/id/{member_id}")
     public ResponseEntity<Optional<TodoGroup>> readGroupId(@PathVariable("member_id") Long memberId) {
 
         Optional<TodoGroup> group = groupService.getGroupByMemberId(memberId);
@@ -40,7 +44,8 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).body(group);
     }
 
-    @GetMapping("/{group_id}/get")
+    //group 정보 요청
+    @GetMapping("/{group_id}")
     public ResponseEntity<Optional<GroupReadDTO>> getGroupInfo(@PathVariable("group_id") Long id) {
 
         Optional<GroupReadDTO> group = groupService.getGroupByGroupId(id);
@@ -48,16 +53,11 @@ public class GroupController {
         return ResponseEntity.status(HttpStatus.CREATED).body(group);
     }
 
-//    @PutMapping("/{group_id}/update") // 그룹 날짜 업데이트
-//    public ResponseEntity<Group> updateGroup(@PathVariable("group_id") Long groupId, @RequestBody GroupCreateDTO dto) {
-//
-//        try {
-//            log.debug("Updating group with ID: {}", groupId); // 디버그 로그 추가
-//            Group updateGroup = groupService.updateGroup(groupId, dto);
-//            log.debug("Updated group details: {}", updateGroup); // 디버그 로그 추가
-//            return ResponseEntity.ok(updateGroup);
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    // 그룹의 날짜 수정
+    @PatchMapping("/update/{group_id}") // 그룹 날짜 업데이트
+    public ResponseEntity<TodoGroup> updateGroup(@PathVariable("group_id") Long groupId, @RequestBody GroupUpdateDTO dto) {
+
+        TodoGroup updatedGroup = groupService.updateGroup(groupId, dto);
+            return ResponseEntity.ok(updatedGroup);
+    }
 }

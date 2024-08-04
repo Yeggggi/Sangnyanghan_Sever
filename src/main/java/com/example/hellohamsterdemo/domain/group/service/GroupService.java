@@ -52,12 +52,4 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
-//    public Group updateGroup(Long id, GroupCreateDTO dto){
-//        Group group = groupRepository.findById(id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 id에 해당하는 group이 없어용"));
-//
-//        group.update(dto.startDate(), dto.endDate(), dto.maxDay());
-//
-//        return  groupRepository.save(group);
-//    }
 }

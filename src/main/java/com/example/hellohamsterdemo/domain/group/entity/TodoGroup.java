@@ -47,6 +47,10 @@ public class TodoGroup { // group 정보를 post 할 때 사용
     @Column(name = "max_day")
     private Long maxDay;
 
+    @Column(name = "expire")
+    private Boolean expire;
+
+
     @CreatedDate //생성날짜 구나 라는 것을 암
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -60,12 +64,14 @@ public class TodoGroup { // group 정보를 post 할 때 사용
 
 
     @Builder //Setter역할 한다
-    public TodoGroup(Long memberId, Long sitterId, Date startDate, Date endDate, Long maxDay) {
+    public TodoGroup(Long memberId, Long sitterId, Date startDate, Date endDate, Long maxDay, Boolean expire) {
         this.memberId = memberId;
         this.sitterId = sitterId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxDay = maxDay;
+        this.expire = expire;
+
     }
 
     public void update(Date startDate, Date endDate, Long maxDay) {
