@@ -39,10 +39,10 @@ public class TodoGroup { // group 정보를 post 할 때 사용
     private Long sitterId;
 
     @Column(name="start_date" )
-    private Date startDate;
+    private String startDate;
 
     @Column(name="end_date" )
-    private Date endDate;
+    private String endDate;
 
     @Column(name = "max_day")
     private Long maxDay;
@@ -64,7 +64,7 @@ public class TodoGroup { // group 정보를 post 할 때 사용
 
 
     @Builder //Setter역할 한다
-    public TodoGroup(Long memberId, Long sitterId, Date startDate, Date endDate, Long maxDay, Boolean expire) {
+    public TodoGroup(Long memberId, Long sitterId, String startDate, String endDate, Long maxDay, Boolean expire) {
         this.memberId = memberId;
         this.sitterId = sitterId;
         this.startDate = startDate;
@@ -74,13 +74,17 @@ public class TodoGroup { // group 정보를 post 할 때 사용
 
     }
 
-    public void update(Date startDate, Date endDate, Long maxDay) {
+    public void update(String startDate, String endDate, Long maxDay) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxDay = maxDay;
     }
 
-    public void TodoGroupRead(Date startDate, Date endDate, Long maxDay) {
+    public void updateSitter(Long sitterId) {
+        this.sitterId = sitterId;
+    }
+
+    public void TodoGroupRead(String startDate, String endDate, Long maxDay) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxDay = maxDay;

@@ -1,5 +1,7 @@
 package com.example.hellohamsterdemo.domain.task.entity;
 
+import com.example.hellohamsterdemo.domain.daytask.entity.DayTask;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -37,7 +39,22 @@ public class Task {
     private Boolean isDaily;
 
 
-    @Builder //Setter역할 한다
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "day_task_id")
+    @JsonBackReference
+    private DayTask dayTask;
+
+    @CreatedDate //생성날짜 구나 라는 것을 암
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    //camelCase하면 db에서 언더 바로 읽는다(_);
+
+    @LastModifiedDate // 수정시간
+    @Column(name = "updated_at")
+    private LocalDateTime updateAt;
+
+
+    @Builder
     public Task(Long memberId, String title, String content, Boolean isDaily) {
         this.memberId = memberId;
         this.title = title;
@@ -49,5 +66,9 @@ public class Task {
         this.title = title;
         this.content = content;
         this.isDaily = isDaily;
+    }
+
+    public void setDayTask(DayTask dayTask) {
+        this.dayTask = dayTask;
     }
 }

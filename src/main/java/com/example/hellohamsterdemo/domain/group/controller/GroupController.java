@@ -1,11 +1,9 @@
 package com.example.hellohamsterdemo.domain.group.controller;
 
-import com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO;
-import com.example.hellohamsterdemo.domain.group.dto.GroupUpdateDTO;
+import com.example.hellohamsterdemo.domain.group.dto.*;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import com.example.hellohamsterdemo.domain.group.repository.GroupRepository;
 import com.example.hellohamsterdemo.domain.group.service.GroupService;
-import com.example.hellohamsterdemo.domain.group.dto.GroupCreateDTO;
 import com.example.hellohamsterdemo.domain.task.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,7 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
 
-    //새 그룹 등록
+    //새 그룹 등록, 응답으로 그룹 아이디를 반환함
     @PostMapping("/post")
     public ResponseEntity<Long> saveGroup(@RequestBody GroupCreateDTO dto) {
 
@@ -43,19 +41,25 @@ public class GroupController {
         return ResponseEntity.created(location).body(group_id);
     }
 
-    // 그룹 아이디 요청
-//    @GetMapping("/id/{member_id}")
-//    public ResponseEntity<Optional<TodoGroup>> readGroupId(@PathVariable("member_id") Long memberId) {
-//
-//        Optional<TodoGroup> group = groupService.getGroupByMemberId(memberId);
-//
-////        return ResponseEntity.status(HttpStatus.CREATED).body(group);
-//
-//
-//        return ResponseEntity.created(location).body(group);
-//    }
+    // 그룹 정보 요청, 멤버아이디가 같고 expire이 false인 가장 최근에 만들어진 그룹 반환함
+    @GetMapping("/member/{member_id}")
+    public ResponseEntity<Optional<GroupFindDTO>> readGroupId(@PathVariable("member_id") Long memberId) {
 
-    //group 정보 요청
+        Optional<GroupFindDTO> group = groupService.getGroupByMemberId(memberId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(group);
+    }
+
+    // 그룹 정보 요청, sitter 아이디가 같고 expire이 false인 가장 최근에 만들어진 그룹 반환함
+    @GetMapping("/sitter/{sitter_id}")
+    public ResponseEntity<Optional<GroupFindDTO>> readGroupBySitter(@PathVariable("sitter_id") Long sitterId) {
+
+        Optional<GroupFindDTO> group = groupService.getGroupBySitterId(sitterId);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(group);
+    }
+
+    // group 정보 요청, group_id로 요청함
     @GetMapping("/{group_id}")
     public ResponseEntity<Optional<GroupReadDTO>> getGroupInfo(@PathVariable("group_id") Long id) {
 
@@ -65,10 +69,19 @@ public class GroupController {
     }
 
     // 그룹의 날짜 수정
-    @PatchMapping("/update/{group_id}") // 그룹 날짜 업데이트
+    @PatchMapping("/update/{group_id}")
     public ResponseEntity<TodoGroup> updateGroup(@PathVariable("group_id") Long groupId, @RequestBody GroupUpdateDTO dto) {
 
         TodoGroup updatedGroup = groupService.updateGroup(groupId, dto);
             return ResponseEntity.ok(updatedGroup);
     }
+
+    // group에 sitter_id 등록
+    @PatchMapping("/update/{group_id}/sitter")
+    public ResponseEntity<TodoGroup> updateSitterId(@PathVariable("group_id") Long id, @RequestBody SitterUpdateDTO dto) {
+
+        TodoGroup updatedGroup = groupService.updateSitter(id, dto);
+        return ResponseEntity.ok(updatedGroup);
+    }
+
 }

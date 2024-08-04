@@ -1,8 +1,6 @@
 package com.example.hellohamsterdemo.domain.group.service;
 
-import com.example.hellohamsterdemo.domain.group.dto.GroupCreateDTO;
-import com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO;
-import com.example.hellohamsterdemo.domain.group.dto.GroupUpdateDTO;
+import com.example.hellohamsterdemo.domain.group.dto.*;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import com.example.hellohamsterdemo.domain.group.repository.GroupRepository;
 import com.example.hellohamsterdemo.domain.task.dto.TaskUpdateDTO;
@@ -32,10 +30,13 @@ public class GroupService {
         return group;
     }
 
-    public Optional<TodoGroup> getGroupByMemberId(Long memberId){
+    public Optional<GroupFindDTO> getGroupByMemberId(Long memberId){
         return groupRepository.findGroupByMemberId(memberId);
     }
 
+    public Optional<GroupFindDTO> getGroupBySitterId(Long sitterId) {
+        return groupRepository.findGroupBySitterId(sitterId);
+    }
     public Optional<GroupReadDTO> getGroupByGroupId(Long id){
         return groupRepository.findGroupByGroupId(id);
     }
@@ -51,5 +52,17 @@ public class GroupService {
         group.update(dto.startDate(), dto.endDate(), dto.maxDay());
         return groupRepository.save(group);
     }
+
+
+    public TodoGroup updateSitter(Long id, SitterUpdateDTO dto) {
+
+        Optional<TodoGroup> optionalGroup = groupRepository.findById(id);
+
+        TodoGroup group = optionalGroup.get();
+
+        group.updateSitter(dto.sitterId());
+        return groupRepository.save(group);
+    }
+
 
 }
