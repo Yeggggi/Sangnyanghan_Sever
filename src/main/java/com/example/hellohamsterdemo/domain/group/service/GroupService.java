@@ -2,10 +2,14 @@ package com.example.hellohamsterdemo.domain.group.service;
 
 import com.example.hellohamsterdemo.domain.group.dto.GroupCreateDTO;
 import com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO;
+import com.example.hellohamsterdemo.domain.group.dto.GroupUpdateDTO;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import com.example.hellohamsterdemo.domain.group.repository.GroupRepository;
+import com.example.hellohamsterdemo.domain.task.dto.TaskUpdateDTO;
+import com.example.hellohamsterdemo.domain.task.entity.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -37,7 +41,16 @@ public class GroupService {
     }
 
 
+    @Transactional
+    public TodoGroup updateGroup(Long id, GroupUpdateDTO dto) {
 
+        Optional<TodoGroup> optionalGroup = groupRepository.findById(id);
+
+        TodoGroup group = optionalGroup.get();
+
+        group.update(dto.startDate(), dto.endDate(), dto.maxDay());
+        return groupRepository.save(group);
+    }
 
 //    public Group updateGroup(Long id, GroupCreateDTO dto){
 //        Group group = groupRepository.findById(id)

@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter  //@Data getter, setter 둘다 포함하고 다른 것도 포함하여 무거워지므로 , 성능 최적화 시에
@@ -38,10 +39,10 @@ public class TodoGroup { // group 정보를 post 할 때 사용
     private Long sitterId;
 
     @Column(name="start_date" )
-    private String startDate;
+    private Date startDate;
 
     @Column(name="end_date" )
-    private String endDate;
+    private Date endDate;
 
     @Column(name = "max_day")
     private Long maxDay;
@@ -59,7 +60,7 @@ public class TodoGroup { // group 정보를 post 할 때 사용
 
 
     @Builder //Setter역할 한다
-    public TodoGroup(Long memberId, Long sitterId, String startDate, String endDate, Long maxDay) {
+    public TodoGroup(Long memberId, Long sitterId, Date startDate, Date endDate, Long maxDay) {
         this.memberId = memberId;
         this.sitterId = sitterId;
         this.startDate = startDate;
@@ -67,13 +68,13 @@ public class TodoGroup { // group 정보를 post 할 때 사용
         this.maxDay = maxDay;
     }
 
-//    public void update(String startDate, String endDate, Long maxDay) {
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.maxDay = maxDay;
-//    }
+    public void update(Date startDate, Date endDate, Long maxDay) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.maxDay = maxDay;
+    }
 
-    public void TodoGroupRead(String startDate, String endDate, Long maxDay) {
+    public void TodoGroupRead(Date startDate, Date endDate, Long maxDay) {
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxDay = maxDay;
