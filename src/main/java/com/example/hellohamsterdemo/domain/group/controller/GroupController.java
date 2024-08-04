@@ -12,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,21 +30,30 @@ public class GroupController {
 
     //새 그룹 등록
     @PostMapping("/post")
-    public ResponseEntity<TodoGroup> saveGroup(@RequestBody GroupCreateDTO dto) {
+    public ResponseEntity<Long> saveGroup(@RequestBody GroupCreateDTO dto) {
 
         TodoGroup savedGroup = groupService.saveGroup(dto);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedGroup);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedGroup.getId())
+                .toUri();
+
+        Long group_id = savedGroup.getId();
+        return ResponseEntity.created(location).body(group_id);
     }
 
     // 그룹 아이디 요청
-    @GetMapping("/id/{member_id}")
-    public ResponseEntity<Optional<TodoGroup>> readGroupId(@PathVariable("member_id") Long memberId) {
-
-        Optional<TodoGroup> group = groupService.getGroupByMemberId(memberId);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(group);
-    }
+//    @GetMapping("/id/{member_id}")
+//    public ResponseEntity<Optional<TodoGroup>> readGroupId(@PathVariable("member_id") Long memberId) {
+//
+//        Optional<TodoGroup> group = groupService.getGroupByMemberId(memberId);
+//
+////        return ResponseEntity.status(HttpStatus.CREATED).body(group);
+//
+//
+//        return ResponseEntity.created(location).body(group);
+//    }
 
     //group 정보 요청
     @GetMapping("/{group_id}")

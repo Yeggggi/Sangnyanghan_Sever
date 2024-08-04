@@ -4,3 +4,4 @@ import java.util.Date;
 
 public record  GroupUpdateDTO(Date startDate, Date endDate, Long maxDay) {
 }
+
