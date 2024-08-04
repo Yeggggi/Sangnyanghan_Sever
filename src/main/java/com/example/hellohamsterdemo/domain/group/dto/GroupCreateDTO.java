@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 
-public record GroupCreateDTO(Long memberId, Long sitterId, Date startDate, Date endDate, Long maxDay, Boolean expire) {
+public record GroupCreateDTO(Long memberId, Long sitterId, String startDate, String endDate, Long maxDay, Boolean expire) {
     public TodoGroup toEntity() {
         return TodoGroup.builder().
                 memberId(memberId).

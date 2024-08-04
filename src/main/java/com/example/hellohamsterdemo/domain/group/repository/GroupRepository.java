@@ -31,10 +31,12 @@ import java.util.Optional;
 
 @Repository
 public interface GroupRepository extends JpaRepository<TodoGroup,Long> {
-    Optional<TodoGroup> findGroupByMemberId(Long memberId);
+
+//    Optional<TodoGroup> findGroupByMemberId(Long memberId);
 
     @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO(g.startDate, g.endDate, g.maxDay) FROM TodoGroup g WHERE g.id = :id")
     Optional<GroupReadDTO> findGroupByGroupId(@Param("id") Long id);
+
 }
 
 

@@ -28,7 +28,7 @@ public class GroupController {
     private final GroupService groupService;
     private final GroupRepository groupRepository;
 
-    //새 그룹 등록
+    //새 그룹 등록, 응답으로 그룹 아이디를 반환함
     @PostMapping("/post")
     public ResponseEntity<Long> saveGroup(@RequestBody GroupCreateDTO dto) {
 
@@ -43,7 +43,7 @@ public class GroupController {
         return ResponseEntity.created(location).body(group_id);
     }
 
-    // 그룹 아이디 요청
+    // TODO: 그룹 정보 요청, 멤버아이디가 같고 expire이 false인 그룹을 반환함
 //    @GetMapping("/id/{member_id}")
 //    public ResponseEntity<Optional<TodoGroup>> readGroupId(@PathVariable("member_id") Long memberId) {
 //
@@ -55,7 +55,7 @@ public class GroupController {
 //        return ResponseEntity.created(location).body(group);
 //    }
 
-    //group 정보 요청
+    //group 정보 요청, group_id로 요청함
     @GetMapping("/{group_id}")
     public ResponseEntity<Optional<GroupReadDTO>> getGroupInfo(@PathVariable("group_id") Long id) {
 

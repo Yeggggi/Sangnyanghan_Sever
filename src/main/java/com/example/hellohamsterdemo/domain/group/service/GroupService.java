@@ -32,9 +32,9 @@ public class GroupService {
         return group;
     }
 
-    public Optional<TodoGroup> getGroupByMemberId(Long memberId){
-        return groupRepository.findGroupByMemberId(memberId);
-    }
+//    public Optional<TodoGroup> getGroupByMemberId(Long memberId){
+//        return groupRepository.findGroupByMemberId(memberId);
+//    }
 
     public Optional<GroupReadDTO> getGroupByGroupId(Long id){
         return groupRepository.findGroupByGroupId(id);
