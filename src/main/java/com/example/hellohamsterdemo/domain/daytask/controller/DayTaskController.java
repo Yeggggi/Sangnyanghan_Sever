@@ -1,6 +1,7 @@
 package com.example.hellohamsterdemo.domain.daytask.controller;
 
 import com.example.hellohamsterdemo.domain.daytask.dto.DayTaskCreateDTO;
+import com.example.hellohamsterdemo.domain.daytask.dto.DayTaskResponseDTO;
 import com.example.hellohamsterdemo.domain.daytask.entity.DayTask;
 import com.example.hellohamsterdemo.domain.daytask.service.DayTaskService;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +36,19 @@ private final DayTaskService dayTaskService;
         return ResponseEntity.status(HttpStatus.OK).body(dayTasks);
     }
 
-
+/*
     // 해당 그룹의 해당 day의 tasks 요청
     @GetMapping("/group/{groupId}/day/{day}")
     public ResponseEntity<List<DayTask>> getDayTasksByGroupAndDay(@PathVariable Long groupId, @PathVariable Long day) {
         List<DayTask> dayTasks = dayTaskService.getDayTasksByGroupAndDay(groupId, day);
+        return ResponseEntity.status(HttpStatus.OK).body(dayTasks);
+    }
+
+ */
+
+    @GetMapping("/group/{groupId}/day/{day}")
+    public ResponseEntity<List<DayTaskResponseDTO>> getDayTasksByGroupAndDay(@PathVariable Long groupId, @PathVariable Long day) {
+        List<DayTaskResponseDTO> dayTasks = dayTaskService.getDayTasksByGroupAndDay(groupId, day);
         return ResponseEntity.status(HttpStatus.OK).body(dayTasks);
     }
 

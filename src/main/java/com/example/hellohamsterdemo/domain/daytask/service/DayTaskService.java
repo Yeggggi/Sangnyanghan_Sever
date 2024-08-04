@@ -3,6 +3,7 @@ package com.example.hellohamsterdemo.domain.daytask.service;
 
 
 import com.example.hellohamsterdemo.domain.daytask.dto.DayTaskCreateDTO;
+import com.example.hellohamsterdemo.domain.daytask.dto.DayTaskResponseDTO;
 import com.example.hellohamsterdemo.domain.daytask.entity.DayTask;
 import com.example.hellohamsterdemo.domain.task.entity.Task;
 import com.example.hellohamsterdemo.domain.task.repository.TaskRepository;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,10 +39,12 @@ public class DayTaskService {
         Optional<DayTask> dayTask = dayTaskRepository.findById(id);
         return dayTask.orElse(null);
     }
-
+/*
     public List<DayTask> getDayTasksByGroupAndDay(Long groupId, Long day) {
         return dayTaskRepository.findByGroupIdAndDay(groupId, day);
     }
+    */
+
 
     public DayTask updateIsChecked(Long id, Boolean isChecked) {
         Optional<DayTask> optionalDayTask = dayTaskRepository.findById(id);
@@ -61,6 +65,32 @@ public class DayTaskService {
         } else {
             return false;
         }
+    }
+
+    public List<DayTaskResponseDTO> getDayTasksByGroupAndDay(Long groupId, Long day) {
+        List<DayTask> dayTasks = dayTaskRepository.findByGroupIdAndDay(groupId, day);
+        return dayTasks.stream()
+                .flatMap(dayTask -> dayTask.getTasks().stream()
+                        .map(task -> toDayTaskResponseDTO(dayTask, task)))
+                .collect(Collectors.toList());
+    }
+
+    private DayTaskResponseDTO toDayTaskResponseDTO(DayTask dayTask, Task task) {
+        return new DayTaskResponseDTO(
+                dayTask.getDayTaskId(),
+                dayTask.getGroupId(),
+                dayTask.getDay(),
+                new DayTaskResponseDTO.TaskDTO(
+                        task.getTaskId(),
+                        task.getMemberId(),
+                        task.getTitle(),
+                        task.getContent(),
+                        task.getIsDaily(),
+                        task.getCreatedAt(),
+                        task.getUpdateAt()
+                ),
+                dayTask.getIsChecked()
+        );
     }
     /*
     @Transactional

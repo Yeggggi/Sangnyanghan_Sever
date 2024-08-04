@@ -80,6 +80,10 @@ public class TodoGroup { // group 정보를 post 할 때 사용
         this.maxDay = maxDay;
     }
 
+    public void updateSitter(Long sitterId) {
+        this.sitterId = sitterId;
+    }
+
     public void TodoGroupRead(String startDate, String endDate, Long maxDay) {
         this.startDate = startDate;
         this.endDate = endDate;

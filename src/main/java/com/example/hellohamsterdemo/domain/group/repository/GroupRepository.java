@@ -1,5 +1,6 @@
 package com.example.hellohamsterdemo.domain.group.repository;
 
+import com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO;
 import com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,11 +33,14 @@ import java.util.Optional;
 @Repository
 public interface GroupRepository extends JpaRepository<TodoGroup,Long> {
 
-//    Optional<TodoGroup> findGroupByMemberId(Long memberId);
+    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.memberId = :memberId AND tg.expire = false ORDER BY tg.createdAt DESC")
+    Optional<GroupFindDTO> findGroupByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO(g.startDate, g.endDate, g.maxDay) FROM TodoGroup g WHERE g.id = :id")
     Optional<GroupReadDTO> findGroupByGroupId(@Param("id") Long id);
 
+    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.sitterId = :sitterId AND tg.expire = false ORDER BY tg.createdAt DESC")
+    Optional<GroupFindDTO> findGroupBySitterId(@Param("sitterId") Long sitterId);
 }
 
 
