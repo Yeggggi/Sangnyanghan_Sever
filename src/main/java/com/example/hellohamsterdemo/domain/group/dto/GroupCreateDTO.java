@@ -14,7 +14,7 @@ public record GroupCreateDTO(Long memberId, Long sitterId, String startDate, Str
                 startDate(startDate).
                 endDate(endDate).
                 maxDay(maxDay).
-                expire(expire).
+                expire(false).
                 build();
     }
 }

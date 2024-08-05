@@ -33,13 +33,13 @@ import java.util.Optional;
 @Repository
 public interface GroupRepository extends JpaRepository<TodoGroup,Long> {
 
-    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.memberId = :memberId AND tg.expire = false ORDER BY tg.createdAt DESC")
+    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.memberId = :memberId AND tg.expire = false ORDER BY tg.createdAt DESC LIMIT 1")
     Optional<GroupFindDTO> findGroupByMemberId(@Param("memberId") Long memberId);
 
     @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupReadDTO(g.startDate, g.endDate, g.maxDay) FROM TodoGroup g WHERE g.id = :id")
     Optional<GroupReadDTO> findGroupByGroupId(@Param("id") Long id);
 
-    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.sitterId = :sitterId AND tg.expire = false ORDER BY tg.createdAt DESC")
+    @Query("SELECT new com.example.hellohamsterdemo.domain.group.dto.GroupFindDTO(tg.id, tg.startDate, tg.endDate, tg.maxDay) FROM TodoGroup tg WHERE tg.sitterId = :sitterId AND tg.expire = false ORDER BY tg.createdAt DESC LIMIT 1")
     Optional<GroupFindDTO> findGroupBySitterId(@Param("sitterId") Long sitterId);
 }
 
