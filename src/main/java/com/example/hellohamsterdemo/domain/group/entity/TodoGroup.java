@@ -89,4 +89,13 @@ public class TodoGroup { // group 정보를 post 할 때 사용
         this.endDate = endDate;
         this.maxDay = maxDay;
     }
+
+    // 원래는 updateExpire를 사용해서 expire 해줘야하는데, 개발과 test를 위해 toggle로 설정해둠
+    public void toggleExpired(Long id) {
+        this.expire = !this.expire;
+    }
+
+    public void updateExpire(Long id) {
+        this.expire = Boolean.TRUE;
+    }
 }

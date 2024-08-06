@@ -64,5 +64,15 @@ public class GroupService {
         return groupRepository.save(group);
     }
 
+    public TodoGroup updateExpire(Long id){
+        Optional<TodoGroup> optionalGroup = groupRepository.findById(id);
+
+        TodoGroup group = optionalGroup.get();
+
+        group.toggleExpired(id);
+
+        return groupRepository.save(group);
+    }
+
 
 }

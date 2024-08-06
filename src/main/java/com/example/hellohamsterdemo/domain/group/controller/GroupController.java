@@ -83,5 +83,14 @@ public class GroupController {
         return ResponseEntity.ok(updatedGroup);
     }
 
+    // change group status expired로
+    // 테스트를 위해 한번 더 api를 호출할때마다 expired 값이 true <-> false로 바뀌게 해놨음
+    @PatchMapping("/{group_id}/expire")
+    public ResponseEntity<TodoGroup> updateExpireGroup(@PathVariable("group_id") Long id) {
+
+        TodoGroup updatedGroup = groupService.updateExpire(id);
+        return ResponseEntity.ok(updatedGroup);
+    }
+
 
 }
