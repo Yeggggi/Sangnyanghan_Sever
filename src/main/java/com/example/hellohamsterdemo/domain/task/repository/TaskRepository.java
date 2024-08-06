@@ -9,6 +9,5 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long>{
-    List<TaskReadDTO> findTaskByMemberId(Long memberId);
-
+    List<Task> findTaskByMemberId(Long memberId);
 }

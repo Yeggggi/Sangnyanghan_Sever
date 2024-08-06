@@ -2,6 +2,7 @@ package com.example.hellohamsterdemo.domain.task.entity;
 
 import com.example.hellohamsterdemo.domain.daytask.entity.DayTask;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,12 +13,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 
 public class Task {
     @Id
@@ -38,6 +41,10 @@ public class Task {
     @Column(name = "is_daily")
     private Boolean isDaily;
 
+    @ElementCollection
+    @CollectionTable(name = "task_images", joinColumns = @JoinColumn(name = "task_id"))
+    @Column(name = "image_url")
+    private List<String> images;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "day_task_id")
@@ -55,11 +62,13 @@ public class Task {
 
 
     @Builder
-    public Task(Long memberId, String title, String content, Boolean isDaily) {
+    public Task(Long taskId, Long memberId, String title, String content, Boolean isDaily, List<String> images) {
+        this.taskId = taskId;
         this.memberId = memberId;
         this.title = title;
         this.content = content;
         this.isDaily = isDaily;
+        this.images = images;
     }
 
     public void update(String title, String content, Boolean isDaily) {
@@ -70,5 +79,9 @@ public class Task {
 
     public void setDayTask(DayTask dayTask) {
         this.dayTask = dayTask;
+    }
+
+    public Long getId() {
+        return taskId;
     }
 }

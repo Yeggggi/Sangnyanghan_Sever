@@ -4,16 +4,15 @@ import com.example.hellohamsterdemo.domain.group.dto.*;
 import com.example.hellohamsterdemo.domain.group.entity.TodoGroup;
 import com.example.hellohamsterdemo.domain.group.repository.GroupRepository;
 import com.example.hellohamsterdemo.domain.group.service.GroupService;
-import com.example.hellohamsterdemo.domain.task.entity.Task;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -83,5 +82,6 @@ public class GroupController {
         TodoGroup updatedGroup = groupService.updateSitter(id, dto);
         return ResponseEntity.ok(updatedGroup);
     }
+
 
 }

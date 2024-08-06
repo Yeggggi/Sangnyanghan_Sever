@@ -1,5 +1,6 @@
 package com.example.hellohamsterdemo.domain.daytask.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DayTask {
 
     @Id
@@ -33,14 +35,9 @@ public class DayTask {
     @Column(name = "day", nullable = false)
     private Long day;
 
-    @ManyToMany
-    @JoinTable(
-            name = "day_task_task",
-            joinColumns = @JoinColumn(name = "day_task_id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id")
-    )
+    @OneToMany(mappedBy = "dayTask", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Task> tasks = new ArrayList<>();
+    private List<DayTaskTask> dayTaskTasks = new ArrayList<>();
 
     @CreatedDate
     @Column(name = "created_at")
@@ -48,11 +45,40 @@ public class DayTask {
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "is_checked", nullable = false)
     private Boolean isChecked = false;
 
+    @Builder
+    public DayTask(Long groupId, Long day, List<DayTaskTask> dayTaskTasks, Boolean isChecked) {
+        this.groupId = groupId;
+        this.day = day;
+        this.dayTaskTasks = dayTaskTasks != null ? dayTaskTasks : new ArrayList<>();
+        this.isChecked = isChecked;
+    }
+
+    public void addDayTaskTask(DayTaskTask dayTaskTask) {
+        dayTaskTasks.add(dayTaskTask);
+        dayTaskTask.setDayTask(this);
+    }
+
+    public void removeDayTaskTask(DayTaskTask dayTaskTask) {
+        dayTaskTasks.remove(dayTaskTask);
+        dayTaskTask.setDayTask(null);
+    }
+
+    public void toggleTaskChecked(int taskIndex) {
+        if (taskIndex >= 0 && taskIndex < dayTaskTasks.size()) {
+            DayTaskTask dayTaskTask = dayTaskTasks.get(taskIndex);
+            dayTaskTask.toggleChecked();
+        }
+    }
+
+    public void setChecked(Boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+    /*
     @Builder
     public DayTask(Long groupId, Long day, List<Task> tasks, Boolean isChecked) {
         this.groupId = groupId;
@@ -74,7 +100,15 @@ public class DayTask {
         }
     }
 
+    public void setChecked(Boolean isChecked) {
+        this.isChecked = isChecked;
+    }
+    public void toggleChecked() {
+        this.isChecked = !this.isChecked;
+    }
     public void checkedupdate(Boolean isChecked) {
         this.isChecked = isChecked;
     }
+
+     */
 }

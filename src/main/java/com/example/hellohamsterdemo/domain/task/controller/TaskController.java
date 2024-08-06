@@ -1,5 +1,6 @@
 package com.example.hellohamsterdemo.domain.task.controller;
 
+import com.example.hellohamsterdemo.domain.image.service.S3ImageService;
 import com.example.hellohamsterdemo.domain.task.dto.TaskCreateDTO;
 import com.example.hellohamsterdemo.domain.task.dto.TaskReadDTO;
 import com.example.hellohamsterdemo.domain.task.dto.TaskUpdateDTO;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,12 +27,18 @@ public class TaskController {
 
     private final TaskService taskService;
     private final TaskRepository taskRepository;
+    private final S3ImageService s3ImageService;
 
     //새 task 등록
-    @PostMapping("/post")
-    public ResponseEntity<Task> saveTask(@RequestBody TaskCreateDTO dto) {
+//    @PostMapping("/post")
+    @PostMapping(value = "/post", consumes = "multipart/form-data")
+    public ResponseEntity<Task> saveTask(@ModelAttribute TaskCreateDTO dto, @RequestPart(value = "image", required = false) List<MultipartFile> images) {
 
         Task savedTask = taskService.saveTask(dto);
+
+        if (images != null && !images.isEmpty()) {
+            s3ImageService.uploadTaskImages(images, dto.memberId(), savedTask.getId());
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
     }
@@ -50,6 +58,19 @@ public class TaskController {
 
         Task updatedTask = taskService.updateTask(id, taskUpdateDto);
         return ResponseEntity.ok(updatedTask);
+    }
+
+
+//    @PostMapping("/s3/upload")
+//    public ResponseEntity<?> s3Upload(@RequestPart(value = "image", required = false) List<MultipartFile> images){
+//        List<String> uploadedUrls = s3ImageService.upload(images);
+//        return ResponseEntity.ok(uploadedUrls);
+//    }
+
+    @GetMapping("/s3/delete")
+    public ResponseEntity<?> s3delete(@RequestParam String addr){
+        s3ImageService.deleteImageFromS3(addr);
+        return ResponseEntity.ok(null);
     }
 
 }
