@@ -67,10 +67,16 @@ public class TaskController {
 //        return ResponseEntity.ok(uploadedUrls);
 //    }
 
-    @GetMapping("/s3/delete")
-    public ResponseEntity<?> s3delete(@RequestParam String addr){
-        s3ImageService.deleteImageFromS3(addr);
-        return ResponseEntity.ok(null);
+//    @GetMapping("/s3/delete")
+//    public ResponseEntity<?> s3delete(@RequestParam String addr){
+//        s3ImageService.deleteImageFromS3(addr);
+//        return ResponseEntity.ok(null);
+//    }
+
+    @DeleteMapping("/{taskId}/delete")
+    public ResponseEntity deleteTask(@PathVariable Long taskId) {
+        taskService.deleteTask(taskId);
+        return ResponseEntity.ok().build();
     }
 
 }
