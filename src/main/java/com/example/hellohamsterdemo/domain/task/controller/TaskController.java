@@ -72,10 +72,10 @@ public class TaskController {
 //        s3ImageService.deleteImageFromS3(addr);
 //        return ResponseEntity.ok(null);
 //    }
-
-    @DeleteMapping("/{taskId}/delete")
-    public ResponseEntity deleteTask(@PathVariable Long taskId) {
-        taskService.deleteTask(taskId);
+    // change expire
+    @PatchMapping("/{taskId}/delete")
+    public ResponseEntity expireTask(@PathVariable Long taskId) {
+        taskService.expireTask(taskId);
         return ResponseEntity.ok().build();
     }
 

@@ -41,6 +41,9 @@ public class Task {
     @Column(name = "is_daily")
     private Boolean isDaily;
 
+    @Column(name = "expire")
+    private Boolean expire;
+
     @ElementCollection
     @CollectionTable(name = "task_images", joinColumns = @JoinColumn(name = "task_id"))
     @Column(name = "image_url")
@@ -62,13 +65,14 @@ public class Task {
 
 
     @Builder
-    public Task(Long taskId, Long memberId, String title, String content, Boolean isDaily, List<String> images) {
+    public Task(Long taskId, Long memberId, String title, String content, Boolean isDaily, List<String> images, Boolean expire) {
         this.taskId = taskId;
         this.memberId = memberId;
         this.title = title;
         this.content = content;
         this.isDaily = isDaily;
         this.images = images;
+        this.expire = expire;
     }
 
     public void update(String title, String content, Boolean isDaily) {
@@ -77,11 +81,20 @@ public class Task {
         this.isDaily = isDaily;
     }
 
+
+    public void setTaskExpire(Boolean expire) {
+        this.expire = expire;
+    }
+
     public void setDayTask(DayTask dayTask) {
         this.dayTask = dayTask;
     }
 
     public Long getId() {
         return taskId;
+    }
+
+    public Task get() {
+        return this;
     }
 }

@@ -2,6 +2,7 @@ package com.example.hellohamsterdemo.domain.task.service;
 
 import com.example.hellohamsterdemo.domain.image.entity.Image;
 import com.example.hellohamsterdemo.domain.image.repository.ImageRepository;
+import com.example.hellohamsterdemo.domain.task.dto.TaskAllReadDTO;
 import com.example.hellohamsterdemo.domain.task.dto.TaskCreateDTO;
 import com.example.hellohamsterdemo.domain.task.dto.TaskReadDTO;
 import com.example.hellohamsterdemo.domain.task.dto.TaskUpdateDTO;
@@ -31,12 +32,12 @@ public class TaskService {
     }
 
     public List<TaskReadDTO> getTaskByMemberId(Long memberId){
-        List<Task> tasks = taskRepository.findTaskByMemberId(memberId);
+        List<TaskAllReadDTO> tasks = taskRepository.findTasksByMemberId(memberId);
 
         return tasks.stream().map(task -> {
-            List<Image> images = imageRepository.findByTaskId(task.getId());
+            List<Image> images = imageRepository.findByTaskId(task.taskId());
             List<String> imageUrls = images.stream().map(Image::getUrl).collect(Collectors.toList());
-            return new TaskReadDTO(task.getId(), task.getTitle(), task.getContent(), task.getIsDaily(), imageUrls);
+            return new TaskReadDTO(task.taskId(), task.title(), task.content(), task.isDaily(), imageUrls);
         }).collect(Collectors.toList());
     }
 
@@ -51,8 +52,12 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public void deleteTask(Long taskId) {
-        taskRepository.deleteById(taskId);
-    }
+    public Task expireTask(Long taskId) {
+        Task optionalTask = taskRepository.findTaskById(taskId);
+        Task task = optionalTask.get();
 
+        task.setTaskExpire(!task.getExpire());
+
+        return taskRepository.save(task);
+    }
 }
