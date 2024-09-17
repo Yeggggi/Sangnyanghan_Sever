@@ -49,10 +49,9 @@ public class Diary {
     @Column(name = "date")
     private Date date;
 
-    @CreatedDate //생성날짜 구나 라는 것을 암
+    @CreatedDate
     @Column(name = "created_at")
     private LocalDateTime createdAt;
-    //camelCase하면 db에서 언더 바로 읽는다(_);
 
     @LastModifiedDate // 수정시간
     @Column(name = "updated_at")
